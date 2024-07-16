@@ -4,6 +4,11 @@ FROM php:7.4-cli
 # Set the working directory inside the container
 WORKDIR /app
 
+# Update package lists and install required packages
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy all files from the current directory to /app inside the container
 COPY . /app
 
