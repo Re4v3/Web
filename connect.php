@@ -8,10 +8,10 @@ if ($_SERVER['HTTP_HOST'] == 'localhost') {
     $dbname = "lovepotion_db";
 } else {
     // Render.com configuration
-    $servername = "mysql"; // ชื่อ host ของ MySQL บน Render.com
-    $username = "root";
-    $password = ""; // รหัสผ่านของ MySQL บน Render.com
-    $dbname = "lovepotion_db";
+    $servername = getenv('POSTGRES_HOST');
+    $username = getenv('POSTGRES_USERNAME');
+    $password = getenv('POSTGRES_PASSWORD');
+    $dbname = getenv('POSTGRES_DATABASE');
 }
 
 // Create connection
