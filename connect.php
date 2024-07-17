@@ -1,19 +1,24 @@
 <?php
-$database_url = "postgresql://root:LjmX4r6w3FM21BZlOyCUmXUZuDiIaZbN@dpg-cqb74iuehbks73dkm78g-a.oregon-postgres.render.com/lovepotion_db";
+// ข้อมูลสำหรับเชื่อมต่อฐานข้อมูล PostgreSQL
+$dburl = "postgresql://root:LjmX4r6w3FM21BZlOyCUmXUZuDiIaZbN@dpg-cqb74iuehbks73dkm78g-a.oregon-postgres.render.com/lovepotion_db";
 
-// Parse the database URL
-$url = parse_url($database_url);
+// ทำการแยกข้อมูลจาก URL
+$urlParts = parse_url($dburl);
 
-$servername = $url['host'];
-$username = $url['user'];
-$password = $url['pass'];
-$dbname = ltrim($url['path'], '/');
+$host = $urlParts['host'];
+$user = $urlParts['user'];
+$password = $urlParts['pass'];
+$dbname = ltrim($urlParts['path'], '/');
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+try {
+    // สร้างการเชื่อมต่อ PDO
+    $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    // ตั้งค่า PDO เพื่อให้แสดง error ออกมา
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    echo "Connected successfully";
+} catch (PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
 }
 ?>
