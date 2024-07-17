@@ -2,23 +2,29 @@
 // Check if running on localhost or Render.com
 if ($_SERVER['HTTP_HOST'] == 'localhost') {
     // Localhost configuration
-    $servername = "localhost";
+    $host = "localhost";
     $username = "root";
     $password = ""; // รหัสผ่านของ MySQL ใน localhost
     $dbname = "lovepotion_db";
 } else {
     // Render.com configuration
-    $servername = getenv('POSTGRES_HOST');
+    $host = getenv('POSTGRES_HOST');
     $username = getenv('POSTGRES_USERNAME');
     $password = getenv('POSTGRES_PASSWORD');
     $dbname = getenv('POSTGRES_DATABASE');
+    $port = getenv('POSTGRES_PORT') ?: 5432; // Default to 5432 if POSTGRES_PORT is not set
 }
+
+// Create connection string
+$conn_string = "host=$host dbname=$dbname user=$username password=$password port=$port";
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = pg_connect($conn_string);
 
 // Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if (!$conn) {
+    die("Connection failed: " . pg_last_error());
 }
+
+echo "Connected successfully!";
 ?>
