@@ -22,4 +22,4 @@ ENV POSTGRES_PASSWORD=LjmX4r6w3FM21BZlOyCUmXUZuDiIaZbN
 ENV POSTGRES_DATABASE=lovepotion_db
 
 # Set the command to run the PHP server
-CMD ["php", "-S", "0.0.0.0:10000", "-t", "."]
+CMD ["php", "-S", "0.0.0.0:5432", "-t", "."]
