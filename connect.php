@@ -1,8 +1,8 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = ""; // ใส่รหัสผ่านของคุณ
-$dbname = "lovepotion_db";
+$servername = getenv('DB_HOST') ?: 'localhost';
+$username = getenv('DB_USERNAME') ?: 'root';
+$password = getenv('DB_PASSWORD') ?: ''; // ใส่รหัสผ่านของคุณสำหรับ XAMPP
+$dbname = getenv('DB_NAME') ?: 'lovepotion_db';
 
 // สร้างการเชื่อมต่อ
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -12,4 +12,5 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+echo "Connected successfully";
 ?>
