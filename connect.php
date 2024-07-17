@@ -1,4 +1,7 @@
 <?php
+// Ensure no output before session_start
+session_start();
+
 // Check if running on localhost or Render.com
 if ($_SERVER['HTTP_HOST'] == 'localhost') {
     // Localhost configuration
@@ -26,4 +29,5 @@ if (!$conn) {
     die("Connection failed: " . pg_last_error());
 }
 
+echo "Connected successfully!";
 ?>
