@@ -15,7 +15,7 @@
 </head>
 <body class="d-flex flex-column h-100">
     <main class="flex-shrink-0">
-        <?php include 'nev.php'; ?>
+        <?php include 'nav.php'; ?>
 
         <!-- Header with Promotional Slideshow -->
         <header class="bg-pink2 py-3">
@@ -150,41 +150,35 @@
                 $conn->close();
                 ?>
 
-     
+                <!-- Call to action -->
+                <aside class="rounded-3 p-4 p-sm-5 mt-5 shadow border rounded" style="background: linear-gradient(to bottom right, #ffffff, #f0f0f0); background-image: url('images/followus.jpg'); background-size: 100%; background-position: center;">
+                    <div class="d-flex align-items-center justify-content-between flex-column flex-xl-row text-center text-xl-start">
+                        <div class="mb-4 mb-xl-0">
+                            <div class="fs-3 fw-bold text-dark">ติดตามข่าวสารได้ที่ IG</div>
+                            <div class="text-dark">ติดตามเราเพื่อรับข่าวสารล่าสุดและโปรโมชั่น</div>
+                        </div>
+                        <div class="ms-xl-4">
+                            <a class="btn btn-pink" href="https://www.instagram.com/tp23_shop?igsh=MXBobXFwNnpobHM0cA%3D%3D&utm_source=qr" target="_blank">ติดตามเรา</a>
+                        </div>
+                    </div>
+                </aside>
 
-        <!-- Call to action -->
-        <aside class="rounded-3 p-4 p-sm-5 mt-5 shadow border rounded" style="background: linear-gradient(to bottom right, #ffffff, #f0f0f0); background-image: url('images/followus.jpg'); background-size: 100%; background-position: center;">
-            <div class="d-flex align-items-center justify-content-between flex-column flex-xl-row text-center text-xl-start">
-                <div class="mb-4 mb-xl-0">
-                    <div class="fs-3 fw-bold text-dark">ติดตามข่าวสารได้ที่ IG</div>
-                    <div class="text-dark">ติดตามเราเพื่อรับข่าวสารล่าสุดและโปรโมชั่น</div>
-                </div>
-                <div class="ms-xl-4">
-                    <a class="btn btn-pink" href="https://www.instagram.com/tp23_shop?igsh=MXBobXFwNnpobHM0cA%3D%3D&utm_source=qr" target="_blank">ติดตามเรา</a>
-                </div>
             </div>
-        </aside>
-
-           </section>
+        </section>
     </main>
     <!-- Footer -->
     <footer class="bg-dark py-4 mt-auto">
         <div class="container px-5">
             <div class="row align-items-center justify-content-between flex-column flex-sm-row">
                 <div class="col-auto">
-                    <div class="small m-0 text-white">ลิขสิทธิ์ &copy; Lovepotion 2023</div>
-                </div>
-                <div class="col-auto">
-                    <a class="link-light small text-decoration-none" href="https://www.instagram.com/tp23_shop?igsh=MXBobXFwNnpobHM0cA%3D%3D&utm_source=qr" target="_blank">
-                        <i class="bi bi-instagram"></i> <!-- Bootstrap Icons Instagram icon -->
-                    </a>
+                    <div class="small fw-bold text-white-50">&copy; LOVEPOTION 2024. All rights reserved.</div>
                 </div>
             </div>
         </div>
     </footer>
-    <!-- Bootstrap core JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS -->
+    <!-- Bootstrap core JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
 </body>
 </html>
