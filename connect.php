@@ -1,15 +1,20 @@
 <?php
+require 'vendor/autoload.php'; // สำหรับการใช้ vlucas/phpdotenv หากคุณใช้ composer
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 // ตรวจสอบสภาพแวดล้อม
-if (getenv('RENDER')) {
+if (getenv('RENDER') === 'true') {
     // สภาพแวดล้อมบน Render.com
     $dsn = getenv('DB_DSN');
     $username = getenv('DB_USERNAME');
     $password = getenv('DB_PASSWORD');
 } else {
     // สภาพแวดล้อมบน XAMPP
-    $dsn = 'pgsql:host=localhost;port=5432;dbname=lovepotion_db';
-    $username = 'root';
-    $password = ''; // ใส่รหัสผ่านของคุณสำหรับ XAMPP
+    $dsn = getenv('DB_DSN');
+    $username = getenv('DB_USERNAME');
+    $password = getenv('DB_PASSWORD');
 }
 
 // สร้างการเชื่อมต่อ
