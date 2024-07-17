@@ -11,14 +11,9 @@ $password = $urlParts['pass'];
 $dbname = ltrim($urlParts['path'], '/');
 
 try {
-    // สร้างการเชื่อมต่อ PDO
-    $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
-
-    // ตั้งค่า PDO เพื่อให้แสดง error ออกมา
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    echo "Connected successfully";
+    $db = new PDO('pgsql:host=dpg-cqb74iuehbks73dkm78g-a.oregon-postgres.render.com;dbname=lovepotion_db', 'root', 'LjmX4r6w3FM21BZlOyCUmXUZuDiIaZbN');
 } catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
+    die('Connection failed: ' . $e->getMessage());
 }
+
 ?>
