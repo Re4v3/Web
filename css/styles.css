@@ -4152,6 +4152,19 @@ textarea.form-control-lg {
   border: 1.5px solid rgb(255, 255, 255);
   box-shadow: 1px 1px 5px rgb(206, 206, 206);
 }
+.btn-tiktok{
+  background-color: rgb(17, 16, 16);
+  border: 1.5px solid white;
+  color: white;
+}
+.btn-tiktok:hover{
+  background-color: rgb(255, 255, 255);
+  transform: color(1);
+  transition: all 0.3s ease-in-out;
+  color: black;
+  border: 1.5px solid rgb(255, 255, 255);
+  box-shadow: 1px 1px 5px rgb(206, 206, 206);
+}
 .bg-pink2{
   background-color: rgb(231, 122, 138);
 }

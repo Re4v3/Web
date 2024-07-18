@@ -63,7 +63,7 @@ if (isset($_GET['delete'])) {
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>จัดการ About Us - LOVEPOTION</title>
+    <title>Manage - LOVEPOTION</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Bootstrap icons-->

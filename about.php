@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Modern Business - Start Bootstrap Template</title>
+    <title>About us - LOVEPOTION</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Bootstrap icons-->
@@ -59,7 +59,7 @@
         <section class="about-section py-5">
             <div class="container px-5 my-5">
                 <div class="text-center mb-5">
-                    <h1 class="fw-bolder mt-3 mb-5 pb-5">About Us</h1>
+                    <h1 class="fw-bolder mt-3 mb-5 pb-5">About Us </h1>
 
                     <?php
                     include 'connect.php';
