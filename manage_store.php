@@ -47,6 +47,10 @@ session_start(); // เริ่ม session
                                 id="manage-promotions">
                                 <i class="bi bi-gift-fill"></i> จัดการโปรโมชั่น
                             </a>
+                            <a href="#" class="list-group-item list-group-item-action manage-section" id="manage-faq">
+                                <i class="bi bi-question-circle-fill"></i> จัดการ FAQ
+                            </a>
+
                             <div class="py-2"></div>
                             <a href="#"
                                 class="list-group-item text-light bg-success list-group-item-action manage-section"
@@ -178,6 +182,52 @@ session_start(); // เริ่ม session
                                 ?>
                             </div>
                         </div>
+
+                        <!-- FAQ Management Section -->
+                        <div id="faq-management" class="management-section" style="display: none;">
+                            <h2>จัดการ FAQ</h2>
+                            <div id="faq-list" class="mt-3">
+                                <?php
+                                include 'connect.php'; // เชื่อมต่อฐานข้อมูล
+                                
+                                $sql = "SELECT * FROM faqs";
+                                $result = $conn->query($sql);
+
+                                if ($result->num_rows > 0) {
+                                    echo '<div class="table-responsive">';
+                                    echo '<table class="table table-striped">';
+                                    echo '<thead>';
+                                    echo '<tr>';
+                                    echo '<th>คำถาม</th>';
+                                    echo '<th>คำตอบ</th>';
+                                    echo '<th class="col-2">การจัดการ</th>';
+                                    echo '</tr>';
+                                    echo '</thead>';
+                                    echo '<tbody>';
+
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<tr>';
+                                        echo '<td>' . $row["question"] . '</td>';
+                                        echo '<td>' . $row["answer"] . '</td>';
+                                        echo '<td>';
+                                        echo '<button class="btn btn-warning btn-sm edit-faq" data-id="' . $row["faq_id"] . '" data-question="' . $row["question"] . '" data-answer="' . $row["answer"] . '">แก้ไข</button> ';
+                                        echo '<button class="btn btn-danger btn-sm delete-faq" data-id="' . $row["faq_id"] . '">ลบ</button>';
+                                        echo '</td>';
+                                        echo '</tr>';
+                                    }
+
+                                    echo '</tbody>';
+                                    echo '</table>';
+                                    echo '</div>';
+                                } else {
+                                    echo '<p class="text-muted">ไม่มี FAQ ในฐานข้อมูล</p>';
+                                }
+
+                                $conn->close();
+                                ?>
+                            </div>
+                        </div>
+
 
         </section>
     </main>
@@ -337,6 +387,61 @@ session_start(); // เริ่ม session
         </div>
     </div>
 
+    <!-- Add FAQ Modal -->
+    <div class="modal fade" id="addFaqModal" tabindex="-1" aria-labelledby="addFaqModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addFaqModalLabel">เพิ่ม FAQ ใหม่</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="add_faq.php" method="post">
+                        <div class="mb-3">
+                            <label for="faqQuestion" class="form-label">คำถาม</label>
+                            <input type="text" class="form-control" id="faqQuestion" name="question" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="faqAnswer" class="form-label">คำตอบ</label>
+                            <textarea class="form-control" id="faqAnswer" name="answer" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">บันทึก</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit FAQ Modal -->
+    <div class="modal fade" id="editFaqModal" tabindex="-1" aria-labelledby="editFaqModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editFaqModalLabel">แก้ไขคำถามและคำตอบ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="edit_faq.php" method="POST">
+                        <input type="hidden" id="editFaqId" name="editFaqId" value="">
+                        <div class="mb-3">
+                            <label for="editFaqQuestion" class="form-label">คำถาม</label>
+                            <input type="text" class="form-control" id="editFaqQuestion" name="editFaqQuestion"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editFaqAnswer" class="form-label">คำตอบ</label>
+                            <textarea class="form-control" id="editFaqAnswer" name="editFaqAnswer" rows="3"
+                                required></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                            <button type="submit" class="btn btn-primary">บันทึกการแก้ไข</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Footer-->
     <?php include 'footer.php'; ?>
@@ -347,140 +452,147 @@ session_start(); // เริ่ม session
     <script src="js/scripts.js"></script>
 
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Toggle between sections
-        document.querySelectorAll(".manage-section").forEach(function (el) {
-            el.addEventListener("click", function () {
-                document.querySelectorAll(".manage-section").forEach(function (section) {
-                    section.classList.remove("active");
-                });
-                el.classList.add("active");
+        document.addEventListener("DOMContentLoaded", function () {
+            // Toggle between sections
+            document.querySelectorAll(".manage-section").forEach(function (el) {
+                el.addEventListener("click", function () {
+                    document.querySelectorAll(".manage-section").forEach(function (section) {
+                        section.classList.remove("active");
+                    });
+                    el.classList.add("active");
 
-                const sectionId = el.id;
-                document.querySelectorAll(".management-section").forEach(function (section) {
-                    section.style.display = "none";
-                });
-                if (sectionId === "manage-products") {
-                    document.getElementById("product-management").style.display = "block";
-                    document.getElementById("add-product").style.display = "block"; // แสดงปุ่มเพิ่มสินค้าใหม่
-                    document.getElementById("add-promotion").style.display = "none"; // ซ่อนปุ่มเพิ่มโปรโมชั่นใหม่
-                } else if (sectionId === "manage-promotions") {
-                    document.getElementById("promotion-management").style.display = "block";
-                    document.getElementById("add-product").style.display = "none"; // ซ่อนปุ่มเพิ่มสินค้าใหม่
-                    document.getElementById("add-promotion").style.display = "block"; // แสดงปุ่มเพิ่มโปรโมชั่นใหม่
-                }
-            });
-        });
-
-        // Initial display setup
-        const activeSection = document.querySelector(".manage-section.active");
-        if (activeSection) {
-            const sectionId = activeSection.id;
-            if (sectionId === "manage-products") {
-                document.getElementById("product-management").style.display = "block";
-                document.getElementById("add-product").style.display = "block"; // แสดงปุ่มเพิ่มสินค้าใหม่
-                document.getElementById("add-promotion").style.display = "none"; // ซ่อนปุ่มเพิ่มโปรโมชั่นใหม่
-            } else if (sectionId === "manage-promotions") {
-                document.getElementById("promotion-management").style.display = "block";
-                document.getElementById("add-product").style.display = "none"; // ซ่อนปุ่มเพิ่มสินค้าใหม่
-                document.getElementById("add-promotion").style.display = "block"; // แสดงปุ่มเพิ่มโปรโมชั่นใหม่
-            }
-        }
-
-        // Show add product modal
-        document.getElementById("add-product").addEventListener("click", function () {
-            var myModal = new bootstrap.Modal(document.getElementById("addProductModal"));
-            myModal.show();
-        });
-
-        // Show add promotion modal
-        document.getElementById("add-promotion").addEventListener("click", function () {
-            var myModal = new bootstrap.Modal(document.getElementById("addPromotionModal"));
-            myModal.show();
-        });
-
-        // Show edit product modal
-        document.querySelectorAll(".edit-product").forEach(function (button) {
-            button.addEventListener("click", function () {
-                const productId = button.getAttribute("data-id");
-                const productName = button.getAttribute("data-name");
-                const productDescription = button.getAttribute("data-description");
-                const productPrice = button.getAttribute("data-price");
-                const productCategory = button.getAttribute("data-category");
-
-                document.getElementById("editProductId").value = productId;
-                document.getElementById("editProductName").value = productName;
-                document.getElementById("editProductDescription").value = productDescription;
-                document.getElementById("editProductPrice").value = productPrice;
-                document.getElementById("editProductCategory").value = productCategory;
-
-                var myModal = new bootstrap.Modal(document.getElementById("editProductModal"));
-                myModal.show();
-            });
-        });
-
-        // Show edit promotion modal
-        document.querySelectorAll(".edit-promotion").forEach(function (button) {
-            button.addEventListener("click", function () {
-                const promotionId = button.getAttribute("data-id");
-                const promotionName = button.getAttribute("data-name");
-                const promotionDescription = button.getAttribute("data-description");
-                const promotionDiscount = button.getAttribute("data-discount");
-
-                document.getElementById("editPromotionId").value = promotionId;
-                document.getElementById("editPromotionName").value = promotionName;
-                document.getElementById("editPromotionDescription").value = promotionDescription;
-                document.getElementById("editPromotionDiscount").value = promotionDiscount;
-
-                var myModal = new bootstrap.Modal(document.getElementById("editPromotionModal"));
-                myModal.show();
-            });
-        });
-
-        // Show delete product confirmation
-        document.querySelectorAll(".delete-product").forEach(function (button) {
-            button.addEventListener("click", function () {
-                const productId = button.getAttribute("data-id");
-                Swal.fire({
-                    title: 'คุณแน่ใจหรือไม่?',
-                    text: "คุณจะไม่สามารถกู้คืนการลบนี้ได้!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'ใช่, ลบเลย!',
-                    cancelButtonText: 'ยกเลิก'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'delete_product.php?product_id=' + productId;
+                    const sectionId = el.id;
+                    document.querySelectorAll(".management-section").forEach(function (section) {
+                        section.style.display = "none";
+                    });
+                    if (sectionId === "manage-products") {
+                        document.getElementById("product-management").style.display = "block";
+                        document.getElementById("add-product").style.display = "block"; // แสดงปุ่มเพิ่มสินค้าใหม่
+                        document.getElementById("add-promotion").style.display = "none"; // ซ่อนปุ่มเพิ่มโปรโมชั่นใหม่
+                    } if (sectionId === "manage-promotions") {
+                        document.getElementById("promotion-management").style.display = "block";
+                        document.getElementById("add-product").style.display = "none"; // ซ่อนปุ่มเพิ่มสินค้าใหม่
+                        document.getElementById("add-promotion").style.display = "block"; // แสดงปุ่มเพิ่มโปรโมชั่นใหม่
+                    } if (sectionId === "manage-faq") {
+                        document.getElementById("faq-management").style.display = "block";
+                        document.getElementById("add-product").style.display = "none"; // ซ่อนปุ่มเพิ่มสินค้าใหม่
+                        document.getElementById("add-promotion").style.display = "none"; // แสดงปุ่มเพิ่มโปรโมชั่นใหม่
                     }
                 });
             });
-        });
 
-        // Show delete promotion confirmation
-        document.querySelectorAll(".delete-promotion").forEach(function (button) {
-            button.addEventListener("click", function () {
-                const promotionId = button.getAttribute("data-id");
-                Swal.fire({
-                    title: 'คุณแน่ใจหรือไม่?',
-                    text: "คุณจะไม่สามารถกู้คืนการลบนี้ได้!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'ใช่, ลบเลย!',
-                    cancelButtonText: 'ยกเลิก'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'delete_promotion.php?promotion_id=' + promotionId;
-                    }
+
+
+            // Show add product modal
+            document.getElementById("add-product").addEventListener("click", function () {
+                var myModal = new bootstrap.Modal(document.getElementById("addProductModal"));
+                myModal.show();
+            });
+
+            // Show add promotion modal
+            document.getElementById("add-promotion").addEventListener("click", function () {
+                var myModal = new bootstrap.Modal(document.getElementById("addPromotionModal"));
+                myModal.show();
+            });
+
+            // Show edit product modal
+            document.querySelectorAll(".edit-product").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    const productId = button.getAttribute("data-id");
+                    const productName = button.getAttribute("data-name");
+                    const productDescription = button.getAttribute("data-description");
+                    const productPrice = button.getAttribute("data-price");
+                    const productCategory = button.getAttribute("data-category");
+
+                    document.getElementById("editProductId").value = productId;
+                    document.getElementById("editProductName").value = productName;
+                    document.getElementById("editProductDescription").value = productDescription;
+                    document.getElementById("editProductPrice").value = productPrice;
+                    document.getElementById("editProductCategory").value = productCategory;
+
+                    var myModal = new bootstrap.Modal(document.getElementById("editProductModal"));
+                    myModal.show();
                 });
             });
-        });
 
-    });
-</script>
+            // Show edit promotion modal
+            document.querySelectorAll(".edit-promotion").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    const promotionId = button.getAttribute("data-id");
+                    const promotionName = button.getAttribute("data-name");
+                    const promotionDescription = button.getAttribute("data-description");
+                    const promotionDiscount = button.getAttribute("data-discount");
+
+                    document.getElementById("editPromotionId").value = promotionId;
+                    document.getElementById("editPromotionName").value = promotionName;
+                    document.getElementById("editPromotionDescription").value = promotionDescription;
+                    document.getElementById("editPromotionDiscount").value = promotionDiscount;
+
+                    var myModal = new bootstrap.Modal(document.getElementById("editPromotionModal"));
+                    myModal.show();
+                });
+            });
+
+            // Show edit FAQ modal
+            document.querySelectorAll(".edit-faq").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    const faqId = button.getAttribute("data-id");
+                    const faqQuestion = button.getAttribute("data-question");
+                    const faqAnswer = button.getAttribute("data-answer");
+
+                    document.getElementById("editFaqId").value = faqId;
+                    document.getElementById("editFaqQuestion").value = faqQuestion;
+                    document.getElementById("editFaqAnswer").value = faqAnswer;
+
+                    var myModal = new bootstrap.Modal(document.getElementById("editFaqModal"));
+                    myModal.show();
+                });
+            });
+
+            // Show delete product confirmation
+            document.querySelectorAll(".delete-product").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    const productId = button.getAttribute("data-id");
+                    Swal.fire({
+                        title: 'คุณแน่ใจหรือไม่?',
+                        text: "คุณจะไม่สามารถกู้คืนการลบนี้ได้!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ใช่, ลบเลย!',
+                        cancelButtonText: 'ยกเลิก'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'delete_product.php?product_id=' + productId;
+                        }
+                    });
+                });
+            });
+
+            // Show delete promotion confirmation
+            document.querySelectorAll(".delete-promotion").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    const promotionId = button.getAttribute("data-id");
+                    Swal.fire({
+                        title: 'คุณแน่ใจหรือไม่?',
+                        text: "คุณจะไม่สามารถกู้คืนการลบนี้ได้!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ใช่, ลบเลย!',
+                        cancelButtonText: 'ยกเลิก'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'delete_promotion.php?promotion_id=' + promotionId;
+                        }
+                    });
+                });
+            });
+
+        });
+    </script>
 
 </body>
 

@@ -7,19 +7,7 @@ if (isset($_SESSION['username'])) {
     exit();
 }
 
-// Database connection parameters
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "lovepotion_db";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("connect.php");
 
 // Process login form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
