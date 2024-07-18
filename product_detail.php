@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <meta charset="utf-8" />
@@ -18,16 +18,13 @@
         .product-name {
             font-size: 1.5rem;
             text-align: left;
-            margin-top: 0px;
-            /* Remove default margin */
-            padding-top: 1rem;
-            /* Add padding for spacing */
+            margin-top: 0px; /* Remove default margin */
+            padding-top: 1rem; /* Add padding for spacing */
         }
 
         .read-more {
             cursor: pointer;
-            color: blue;
-            /* Change color as desired */
+            color: blue; /* Change color as desired */
         }
 
         .read-more:hover {
@@ -66,7 +63,7 @@
                             $row = $result->fetch_assoc();
                             ?>
                             <div class="mb-5 mb-lg-0">
-                                <div class="rounded shadow-lg overflow-hidden transform-perspective-right">
+                                <div class="rounded shadow border overflow-hidden transform-perspective-right">
                                     <img class="img-fluid rounded" src="<?php echo $row['image_url']; ?>"
                                         alt="Product Image">
                                 </div>
@@ -79,7 +76,7 @@
                         $conn->close();
                         ?>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 rounded bg-light shadow border">
                         <?php
                         include 'connect.php'; // Connect to the database
                         
@@ -93,44 +90,40 @@
                         if ($result->num_rows > 0) {
                             $row = $result->fetch_assoc();
                             ?>
-                            <h1 class="display-6 fw-bolder product-name"><?php echo $row['name']; ?></h1>
-                            <p class="lead fw-normal px-2 text-muted description-full" style="font-size: 1rem;">
-                                <?php echo $row['description']; ?>
-                            </p>
-                            <p class="lead fw-normal px-2 text-muted">
-                                <span class="description-short" style="font-size: 1rem;">
-                                    <?php
-                                    $short_description = $row['description'];
-                                    if (strlen($short_description) > 430) {
-                                        $short_description = substr($short_description, 0, 430) . '...';
-                                    }
-                                    echo $short_description;
-                                    ?>
-                                </span>
-                                <button class="text-dark btn-sm btn read-more">อ่านเพิ่มเติม</button>
-                            </p>
-                            <div class="text-muted rounded-pill px-2 py-3 mb-4 text-uppercase">
-                                <?php echo $row['category']; ?>
-                            </div>
-                            <div class="d-flex align-items-center mb-4">
-                                <div class="fs-5">
-                                    <span class="ms-2">ราคา : <span
-                                            class="text-success fw-bold"><?php echo $row['price']; ?> </span><span
-                                            style="font-size: 0.9rem;">ต่อชิ้น </span></span>
+                            <div class="text-dark rounded p-4">
+                                <h1 class="display-6 fw-bolder product-name"><?php echo $row['name']; ?></h1>
+                                <p class="lead fw-normal text-muted description-full" style="font-size: 1rem; display: none;">
+                                    <?php echo $row['description']; ?>
+                                </p>
+                                <p class="lead fw-normal text-muted">
+                                    <span class="description-short" style="font-size: 1rem;">
+                                        <?php
+                                        $short_description = $row['description'];
+                                        if (strlen($short_description) > 430) {
+                                            $short_description = substr($short_description, 0, 430) . '...';
+                                        }
+                                        echo $short_description;
+                                        ?>
+                                    </span>
+                                    <button class="text-dark btn-sm btn read-more">อ่านเพิ่มเติม</button>
+                                </p>
+                                <div class="text-muted rounded-pill px-2 py-3 mb-4 text-uppercase">
+                                    <?php echo $row['category']; ?>
+                                </div>
+                                <div class="d-flex align-items-center mb-4">
+                                    <div class="fs-5">
+                                        <span class="ms-2">ราคา : <span class="text-success fw-bold"><?php echo $row['price']; ?> </span><span style="font-size: 0.9rem;">ต่อชิ้น </span></span>
+                                    </div>
+                                </div>
+                                <div class="ms-3 w-100 container d-flex justify-content-left">
+                                    <a class="btn btn-pink btn-lg flex-shrink-0 me-3" href="https://www.instagram.com/tp23_shop?igsh=MXBobXFwNnpobHM0cA%3D%3D&utm_source=qr" target="_blank">
+                                        <i class="bi bi-instagram"></i> Instagram
+                                    </a>
+                                    <a class="btn btn-tiktok btn-lg flex-shrink-0" href="https://www.tiktok.com/@tp23_shop?_t=8o0ZBqDdza3&_r=1" target="_blank">
+                                        <i class="bi bi-file-play"></i> Tiktok
+                                    </a>
                                 </div>
                             </div>
-                            <div class="ms-3 w-100 container d-flex justify-content-left">
-                                <a class="btn btn-pink btn-lg flex-shrink-0 me-3"
-                                    href="https://www.instagram.com/tp23_shop?igsh=MXBobXFwNnpobHM0cA%3D%3D&utm_source=qr"
-                                    target="_blank">
-                                    <i class="bi bi-instagram"></i> Instagram
-                                </a>
-                                <a class="btn btn-tiktok btn-lg flex-shrink-0"
-                                    href="https://www.tiktok.com/@tp23_shop?_t=8o0ZBqDdza3&_r=1" target="_blank">
-                                    <i class="bi bi-file-play"></i> Tiktok
-                                </a>
-                            </div>
-
                             <?php
                         } else {
                             echo '<div class="alert alert-danger" role="alert">Product not found</div>';
@@ -152,14 +145,11 @@
                     <div class="small m-0 text-white">ลิขสิทธิ์ &copy; Lovepotion 2023</div>
                 </div>
                 <div class="col-auto">
-                    <a class="link-light small text-decoration-none"
-                        href="https://www.instagram.com/tp23_shop?igsh=MXBobXFwNnpobHM0cA%3D%3D&utm_source=qr"
-                        target="_blank">
+                    <a class="link-light small text-decoration-none" href="https://www.instagram.com/tp23_shop?igsh=MXBobXFwNnpobHM0cA%3D%3D&utm_source=qr" target="_blank">
                         <i class="bi bi-instagram"></i> Instagram
                     </a>
                     <span class="text-white mx-1">&middot;</span>
-                    <a class="link-light small text-decoration-none"
-                        href="https://www.tiktok.com/@tp23_shop?_t=8o0ZBqDdza3&_r=1" target="_blank">
+                    <a class="link-light small text-decoration-none" href="https://www.tiktok.com/@tp23_shop?_t=8o0ZBqDdza3&_r=1" target="_blank">
                         <i class="bi bi-file-play"></i> Tiktok
                     </a>
                 </div>
