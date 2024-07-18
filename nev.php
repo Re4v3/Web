@@ -15,7 +15,7 @@ if (session_status() == PHP_SESSION_NONE) {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item"><a class="nav-link" href="shop.php"><i class="bi bi-cart"></i> ร้านค้า</a></li>
-                <li class="nav-item"><a class="nav-link" href="about.html"><i class="bi bi-info-circle"></i> เกี่ยวกับ</a></li>
+                <li class="nav-item"><a class="nav-link" href="about.php"><i class="bi bi-info-circle"></i> เกี่ยวกับ</a></li>
                 <li class="nav-item"><a class="nav-link" href="faq.php"><i class="bi bi-question-circle"></i> คำถามที่พบบ่อย</a></li>
                 <?php
                 // Check if username is set in session

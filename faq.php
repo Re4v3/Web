@@ -48,14 +48,14 @@
                             if ($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     echo '<div class="accordion-item">';
-                                    echo '<h3 class="accordion-header" id="heading' . $row['faq_id'] . '">';
+                                    echo '<h3 class="accordion-header " id="heading' . $row['faq_id'] . '">';
                                     echo '<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse' . $row['faq_id'] . '" aria-expanded="false" aria-controls="collapse' . $row['faq_id'] . '">';
-                                    echo $row['question'];
+                                    echo '<p class="fw-bold text-primary">'.$row['question'].'</p>';
                                     echo '</button>';
                                     echo '</h3>';
                                     echo '<div id="collapse' . $row['faq_id'] . '" class="accordion-collapse collapse" aria-labelledby="heading' . $row['faq_id'] . '" data-bs-parent="#faqAccordion">';
                                     echo '<div class="accordion-body">';
-                                    echo $row['answer'];
+                                    echo '<div class="ms-2">💓 '.$row['answer'].'</div>';
                                     echo '</div>';
                                     echo '</div>';
                                     echo '</div>';

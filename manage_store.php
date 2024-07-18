@@ -50,6 +50,10 @@ session_start(); // เริ่ม session
                             <a href="#" class="list-group-item list-group-item-action manage-section" id="manage-faq">
                                 <i class="bi bi-question-circle-fill"></i> จัดการ FAQ
                             </a>
+                            <a href="manage_about_us.php" class="list-group-item list-group-item-action manage-section">
+                                <i class="bi bi-cart-fill"></i> จัดการ About us
+                            </a>
+
 
                             <div class="py-2"></div>
                             <a href="#"
