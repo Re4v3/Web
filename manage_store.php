@@ -63,6 +63,12 @@ session_start(); // เริ่ม session
                                 <i class="bi bi-plus-circle"></i> เพิ่มโปรโมชั่นใหม่
                             </a>
 
+                            <a href="#"
+                                class="list-group-item text-light bg-success list-group-item-action manage-section"
+                                id="add-faq" style="display: none;">
+                                <i class="bi bi-plus-circle"></i> เพิ่ม FAQ ใหม่
+                            </a>
+
                         </div>
                     </div>
 
@@ -453,6 +459,8 @@ session_start(); // เริ่ม session
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // Show add product button
+            document.getElementById("add-product").style.display = "block";
             // Toggle between sections
             document.querySelectorAll(".manage-section").forEach(function (el) {
                 el.addEventListener("click", function () {
@@ -469,14 +477,17 @@ session_start(); // เริ่ม session
                         document.getElementById("product-management").style.display = "block";
                         document.getElementById("add-product").style.display = "block"; // แสดงปุ่มเพิ่มสินค้าใหม่
                         document.getElementById("add-promotion").style.display = "none"; // ซ่อนปุ่มเพิ่มโปรโมชั่นใหม่
+                        document.getElementById("add-faq").style.display = "none";
                     } if (sectionId === "manage-promotions") {
                         document.getElementById("promotion-management").style.display = "block";
                         document.getElementById("add-product").style.display = "none"; // ซ่อนปุ่มเพิ่มสินค้าใหม่
                         document.getElementById("add-promotion").style.display = "block"; // แสดงปุ่มเพิ่มโปรโมชั่นใหม่
+                        document.getElementById("add-faq").style.display = "none";
                     } if (sectionId === "manage-faq") {
                         document.getElementById("faq-management").style.display = "block";
                         document.getElementById("add-product").style.display = "none"; // ซ่อนปุ่มเพิ่มสินค้าใหม่
                         document.getElementById("add-promotion").style.display = "none"; // แสดงปุ่มเพิ่มโปรโมชั่นใหม่
+                        document.getElementById("add-faq").style.display = "block";
                     }
                 });
             });
@@ -492,6 +503,11 @@ session_start(); // เริ่ม session
             // Show add promotion modal
             document.getElementById("add-promotion").addEventListener("click", function () {
                 var myModal = new bootstrap.Modal(document.getElementById("addPromotionModal"));
+                myModal.show();
+            });
+            // Show add faq modal
+            document.getElementById("add-faq").addEventListener("click", function () {
+                var myModal = new bootstrap.Modal(document.getElementById("addFaqModal"));
                 myModal.show();
             });
 
@@ -569,6 +585,28 @@ session_start(); // เริ่ม session
                     });
                 });
             });
+
+            // Show delete FAQ confirmation
+            document.querySelectorAll(".delete-faq").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    const faqId = button.getAttribute("data-id");
+                    Swal.fire({
+                        title: 'คุณแน่ใจหรือไม่?',
+                        text: "คุณจะไม่สามารถกู้คืนการลบนี้ได้!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ใช่, ลบเลย!',
+                        cancelButtonText: 'ยกเลิก'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'delete_faq.php?faq_id=' + faqId;
+                        }
+                    });
+                });
+            });
+
 
             // Show delete promotion confirmation
             document.querySelectorAll(".delete-promotion").forEach(function (button) {
