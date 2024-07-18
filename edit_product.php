@@ -8,14 +8,34 @@ $description = $_POST['description'];
 $price = $_POST['price'];
 $category = $_POST['category'];
 
-if(isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
+// Check if there are any uploaded files
+if (!empty(array_filter($_FILES['image']['name']))) {
     $target_dir = "images/";
-    $target_file = $target_dir . basename($_FILES["image"]["name"]);
-    move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
+    $image_urls = [];
 
-    $sql = "UPDATE products SET name='$name', description='$description', price='$price', category='$category', image_url='$target_file' WHERE product_id='$product_id'";
+    // Loop through each uploaded file
+    foreach ($_FILES['image']['name'] as $key => $image_name) {
+        if (!empty($image_name)) {
+            $target_file = $target_dir . basename($image_name);
+            move_uploaded_file($_FILES['image']['tmp_name'][$key], $target_file);
+            $image_urls[] = $target_file;
+        } else {
+            $image_urls[] = NULL;
+        }
+    }
+
+    // Assign image URLs to variables
+    $image1 = isset($image_urls[0]) ? "'" . $image_urls[0] . "'" : "NULL";
+    $image2 = isset($image_urls[1]) ? "'" . $image_urls[1] . "'" : "NULL";
+    $image3 = isset($image_urls[2]) ? "'" . $image_urls[2] . "'" : "NULL";
+
+    // Update SQL query with image URLs
+    $sql = "UPDATE products SET name='$name', description='$description', price='$price', category='$category', 
+            image_url=$image1, image_url_2=$image2, image_url_3=$image3 WHERE product_id='$product_id'";
 } else {
-    $sql = "UPDATE products SET name='$name', description='$description', price='$price', category='$category' WHERE product_id='$product_id'";
+    // Update SQL query without changing images
+    $sql = "UPDATE products SET name='$name', description='$description', price='$price', category='$category' 
+            WHERE product_id='$product_id'";
 }
 
 if ($conn->query($sql) === TRUE) {

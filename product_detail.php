@@ -62,11 +62,28 @@
                         if ($result->num_rows > 0) {
                             $row = $result->fetch_assoc();
                             ?>
-                            <div class="mb-5 mb-lg-0">
-                                <div class="rounded shadow border overflow-hidden transform-perspective-right">
-                                    <img class="img-fluid rounded" src="<?php echo $row['image_url']; ?>"
-                                        alt="Product Image">
+                            <div id="product-images-carousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    <?php
+                                    $image_urls = array($row['image_url'], $row['image_url_2'], $row['image_url_3']);
+                                    foreach ($image_urls as $index => $image_url) {
+                                        if (!empty($image_url)) { // Check if the image URL is not empty
+                                            $active = ($index === 0) ? ' active' : '';
+                                            echo '<div class="carousel-item' . $active . '">';
+                                            echo '<img src="' . $image_url . '" class="d-block w-100" alt="Product Image">';
+                                            echo '</div>';
+                                        }
+                                    }
+                                    ?>
                                 </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#product-images-carousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#product-images-carousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
                             </div>
                             <?php
                         } else {

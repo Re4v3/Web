@@ -26,6 +26,7 @@ session_start(); // เริ่ม session
             max-height: 600px;
             overflow-y: auto;
         }
+
     </style>
 </head>
 
@@ -93,56 +94,71 @@ session_start(); // เริ่ม session
 
 
 
-                        <!-- Products Management -->
-                        <div id="product-management" class="management-section">
-                            <!-- Products List -->
-                            <div id="products-list">
-                                <?php
-                                include 'connect.php'; // เชื่อมต่อฐานข้อมูล
-                                
-                                $sql = "SELECT * FROM products";
-                                $result = $conn->query($sql);
+                        <?php
+                        include 'connect.php'; // เชื่อมต่อฐานข้อมูล
+                        
+                        $sql = "SELECT * FROM products";
+                        $result = $conn->query($sql);
 
-                                if ($result->num_rows > 0) {
-                                    echo '<div class="table-responsive table-wrapper">';
-                                    echo '<table class=" table table-striped">';
-                                    echo '<thead>';
-                                    echo '<tr>';
-                                    echo '<th>ชื่อสินค้า</th>';
-                                    echo '<th>รายละเอียด</th>';
-                                    echo '<th>ราคา</th>';
-                                    echo '<th>ประเภท</th>';
-                                    echo '<th>ภาพสินค้า</th>';
-                                    echo '<th>การจัดการ</th>';
-                                    echo '</tr>';
-                                    echo '</thead>';
-                                    echo '<tbody>';
+                        if ($result->num_rows > 0) {
+                            echo '<div class="table-responsive table-wrapper">';
+                            echo '<table class="table table-striped">';
+                            echo '<thead>';
+                            echo '<tr>';
+                            echo '<th>ชื่อสินค้า</th>';
+                            echo '<th>รายละเอียด</th>';
+                            echo '<th>ราคา</th>';
+                            echo '<th>ประเภท</th>';
+                            echo '<th>ภาพสินค้า</th>';
+                            echo '<th>การจัดการ</th>';
+                            echo '</tr>';
+                            echo '</thead>';
+                            echo '<tbody>';
 
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<tr>';
-                                        echo '<td>' . $row["name"] . '</td>';
-                                        echo '<td>' . $row["description"] . '</td>';
-                                        echo '<td>' . $row["price"] . '</td>';
-                                        echo '<td>' . $row["category"] . '</td>';
-                                        echo '<td><img src="' . $row["image_url"] . '" class="img-thumbnail" width="100"></td>';
-                                        echo '<td>';
-                                        echo '<button class="btn btn-warning btn-sm edit-product" data-id="' . $row["product_id"] . '" data-name="' . $row["name"] . '" data-description="' . $row["description"] . '" data-price="' . $row["price"] . '" data-category="' . $row["category"] . '" data-image="' . $row["image_url"] . '">แก้ไข</button> ';
-                                        echo '<button class="btn btn-danger btn-sm delete-product" data-id="' . $row["product_id"] . '">ลบ</button>';
-                                        echo '</td>';
-                                        echo '</tr>';
-                                    }
+                            while ($row = $result->fetch_assoc()) {
+                                echo '<tr>';
+                                echo '<td>' . $row["name"] . '</td>';
+                                echo '<td class="description">' . $row["description"] . '</td>';
+                                echo '<td>' . $row["price"] . '</td>';
+                                echo '<td>' . $row["category"] . '</td>';
 
-                                    echo '</tbody>';
-                                    echo '</table>';
-                                    echo '</div>';
-                                } else {
-                                    echo '<p class="text-muted">ยังไม่มีสินค้าในฐานข้อมูล</p>';
+                                // Gather all image URLs into an array
+                                $image_urls = [];
+                                if (!empty($row["image_url"])) {
+                                    $image_urls[] = $row["image_url"];
+                                }
+                                if (!empty($row["image_url_2"])) {
+                                    $image_urls[] = $row["image_url_2"];
+                                }
+                                if (!empty($row["image_url_3"])) {
+                                    $image_urls[] = $row["image_url_3"];
                                 }
 
-                                $conn->close();
-                                ?>
-                            </div>
-                        </div>
+                                // Display each image in a table cell
+                                echo '<td>';
+                                foreach ($image_urls as $image_url) {
+                                    echo '<img src="' . $image_url . '" class="img-thumbnail" width="100" style="margin-bottom: 5px;">';
+                                }
+                                echo '</td>';
+
+                                echo '<td>';
+                                echo '<button class="btn btn-warning btn-sm edit-product" data-id="' . $row["product_id"] . '" data-name="' . $row["name"] . '" data-description="' . $row["description"] . '" data-price="' . $row["price"] . '" data-category="' . $row["category"] . '" data-image="' . $row["image_url"] . '">แก้ไข</button> ';
+                                echo '<button class="btn btn-danger btn-sm delete-product" data-id="' . $row["product_id"] . '">ลบ</button>';
+                                echo '</td>';
+                                echo '</tr>';
+                            }
+
+                            echo '</tbody>';
+                            echo '</table>';
+                            echo '</div>';
+                        } else {
+                            echo '<p class="text-muted">ยังไม่มีสินค้าในฐานข้อมูล</p>';
+                        }
+
+                        $conn->close();
+                        ?>
+
+
 
                         <!-- Promotions Management -->
                         <div id="promotion-management" class="management-section" style="display: none;">
@@ -271,8 +287,16 @@ session_start(); // เริ่ม session
                             <input type="text" class="form-control" id="productCategory" name="category" required>
                         </div>
                         <div class="mb-3">
-                            <label for="productImage" class="form-label">ภาพสินค้า</label>
-                            <input class="form-control" type="file" id="productImage" name="image" required>
+                            <label for="productImage1" class="form-label">ภาพสินค้า 1</label>
+                            <input class="form-control" type="file" id="productImage1" name="image[]" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productImage2" class="form-label">ภาพสินค้า 2</label>
+                            <input class="form-control" type="file" id="productImage2" name="image[]">
+                        </div>
+                        <div class="mb-3">
+                            <label for="productImage3" class="form-label">ภาพสินค้า 3</label>
+                            <input class="form-control" type="file" id="productImage3" name="image[]">
                         </div>
                         <button type="submit" class="btn btn-primary">บันทึก</button>
                     </form>
@@ -280,6 +304,8 @@ session_start(); // เริ่ม session
             </div>
         </div>
     </div>
+
+
 
     <!-- Edit Product Modal -->
     <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel"
@@ -311,8 +337,16 @@ session_start(); // เริ่ม session
                             <input type="text" class="form-control" id="editProductCategory" name="category" required>
                         </div>
                         <div class="mb-3">
-                            <label for="editProductImage" class="form-label">ภาพสินค้า</label>
-                            <input class="form-control" type="file" id="editProductImage" name="image">
+                            <label for="editProductImage1" class="form-label">ภาพสินค้า 1</label>
+                            <input class="form-control" type="file" id="editProductImage1" name="image[]">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editProductImage2" class="form-label">ภาพสินค้า 2</label>
+                            <input class="form-control" type="file" id="editProductImage2" name="image[]">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editProductImage3" class="form-label">ภาพสินค้า 3</label>
+                            <input class="form-control" type="file" id="editProductImage3" name="image[]">
                         </div>
                         <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
                     </form>
@@ -320,6 +354,9 @@ session_start(); // เริ่ม session
             </div>
         </div>
     </div>
+
+
+
 
     <!-- Add Promotion Modal -->
     <div class="modal fade" id="addPromotionModal" tabindex="-1" aria-labelledby="addPromotionModalLabel"
