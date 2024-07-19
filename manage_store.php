@@ -23,10 +23,15 @@ session_start(); // เริ่ม session
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
     <style>
         .table-wrapper {
-            max-height: 600px;
+            max-height: 400px;
             overflow-y: auto;
         }
 
+        .img-thumbnail {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+        }
     </style>
 </head>
 
@@ -93,77 +98,79 @@ session_start(); // เริ่ม session
                         ?>
 
 
+                        <!-- product Management Section -->
+                        <div id="product-management" class="management-section" style="display: block;">
+                            <h2>จัดการสินค้า</h2>
+                            <div id="products-list" class="mt-3"></div>
+                            <?php
+                            include 'connect.php'; // เชื่อมต่อฐานข้อมูล
+                            
+                            $sql = "SELECT * FROM products";
+                            $result = $conn->query($sql);
 
-                        <?php
-                        include 'connect.php'; // เชื่อมต่อฐานข้อมูล
-                        
-                        $sql = "SELECT * FROM products";
-                        $result = $conn->query($sql);
-
-                        if ($result->num_rows > 0) {
-                            echo '<div class="table-responsive table-wrapper">';
-                            echo '<table class="table table-striped">';
-                            echo '<thead>';
-                            echo '<tr>';
-                            echo '<th>ชื่อสินค้า</th>';
-                            echo '<th>รายละเอียด</th>';
-                            echo '<th>ราคา</th>';
-                            echo '<th>ประเภท</th>';
-                            echo '<th>ภาพสินค้า</th>';
-                            echo '<th>การจัดการ</th>';
-                            echo '</tr>';
-                            echo '</thead>';
-                            echo '<tbody>';
-
-                            while ($row = $result->fetch_assoc()) {
+                            if ($result->num_rows > 0) {
+                                echo '<div class="table-responsive table-wrapper">';
+                                echo '<table class="table table-striped">';
+                                echo '<thead>';
                                 echo '<tr>';
-                                echo '<td>' . $row["name"] . '</td>';
-                                echo '<td class="description">' . $row["description"] . '</td>';
-                                echo '<td>' . $row["price"] . '</td>';
-                                echo '<td>' . $row["category"] . '</td>';
-
-                                // Gather all image URLs into an array
-                                $image_urls = [];
-                                if (!empty($row["image_url"])) {
-                                    $image_urls[] = $row["image_url"];
-                                }
-                                if (!empty($row["image_url_2"])) {
-                                    $image_urls[] = $row["image_url_2"];
-                                }
-                                if (!empty($row["image_url_3"])) {
-                                    $image_urls[] = $row["image_url_3"];
-                                }
-
-                                // Display each image in a table cell
-                                echo '<td>';
-                                foreach ($image_urls as $image_url) {
-                                    echo '<img src="' . $image_url . '" class="img-thumbnail" width="100" style="margin-bottom: 5px;">';
-                                }
-                                echo '</td>';
-
-                                echo '<td>';
-                                echo '<button class="btn btn-warning btn-sm edit-product" data-id="' . $row["product_id"] . '" data-name="' . $row["name"] . '" data-description="' . $row["description"] . '" data-price="' . $row["price"] . '" data-category="' . $row["category"] . '" data-image="' . $row["image_url"] . '">แก้ไข</button> ';
-                                echo '<button class="btn btn-danger btn-sm delete-product" data-id="' . $row["product_id"] . '">ลบ</button>';
-                                echo '</td>';
+                                echo '<th>ชื่อสินค้า</th>';
+                                echo '<th>รายละเอียด</th>';
+                                echo '<th>ราคา</th>';
+                                echo '<th>ประเภท</th>';
+                                echo '<th>ภาพสินค้า</th>';
+                                echo '<th>การจัดการ</th>';
                                 echo '</tr>';
+                                echo '</thead>';
+                                echo '<tbody>';
+
+                                while ($row = $result->fetch_assoc()) {
+                                    echo '<tr>';
+                                    echo '<td>' . $row["name"] . '</td>';
+                                    echo '<td class="description">' . $row["description"] . '</td>';
+                                    echo '<td>' . $row["price"] . '</td>';
+                                    echo '<td>' . $row["category"] . '</td>';
+
+                                    // Gather all image URLs into an array
+                                    $image_urls = [];
+                                    if (!empty($row["image_url"])) {
+                                        $image_urls[] = $row["image_url"];
+                                    }
+                                    if (!empty($row["image_url_2"])) {
+                                        $image_urls[] = $row["image_url_2"];
+                                    }
+                                    if (!empty($row["image_url_3"])) {
+                                        $image_urls[] = $row["image_url_3"];
+                                    }
+
+                                    // Display each image in a table cell
+                                    echo '<td>';
+                                    foreach ($image_urls as $image_url) {
+                                        echo '<img src="' . $image_url . '" class="img-thumbnail" style="margin-bottom: 5px;">';
+                                    }
+                                    echo '</td>';
+
+                                    echo '<td>';
+                                    echo '<button class="btn btn-warning btn-sm edit-product" data-id="' . $row["product_id"] . '" data-name="' . $row["name"] . '" data-description="' . $row["description"] . '" data-price="' . $row["price"] . '" data-category="' . $row["category"] . '">แก้ไข</button> ';
+                                    echo '<button class="btn btn-danger btn-sm delete-product" data-id="' . $row["product_id"] . '">ลบ</button>';
+                                    echo '</td>';
+                                    echo '</tr>';
+                                }
+
+                                echo '</tbody>';
+                                echo '</table>';
+                                echo '</div>';
+                            } else {
+                                echo '<p class="text-muted">ยังไม่มีสินค้าในฐานข้อมูล</p>';
                             }
 
-                            echo '</tbody>';
-                            echo '</table>';
-                            echo '</div>';
-                        } else {
-                            echo '<p class="text-muted">ยังไม่มีสินค้าในฐานข้อมูล</p>';
-                        }
-
-                        $conn->close();
-                        ?>
-
-
+                            $conn->close();
+                            ?>
+                        </div>
 
                         <!-- Promotions Management -->
                         <div id="promotion-management" class="management-section" style="display: none;">
-                            <!-- Promotion List -->
-                            <div id="promotions-list">
+                            <h2>จัดการโปรโมชั่น</h2>
+                            <div id="promotions-list" class="mt-3">
                                 <?php
                                 include 'connect.php'; // เชื่อมต่อฐานข้อมูล
                                 
@@ -179,7 +186,7 @@ session_start(); // เริ่ม session
                                     echo '<th>รายละเอียด</th>';
                                     echo '<th>ส่วนลด</th>';
                                     echo '<th>ภาพโปรโมชั่น</th>';
-                                    echo '<th>การจัดการ</th>';
+                                    echo '<th class="col-2">การจัดการ</th>';
                                     echo '</tr>';
                                     echo '</thead>';
                                     echo '<tbody>';
@@ -191,7 +198,7 @@ session_start(); // เริ่ม session
                                         echo '<td>' . $row["discount_percentage"] . '</td>';
                                         echo '<td><img src="' . $row["image_url"] . '" class="img-thumbnail" width="100"></td>';
                                         echo '<td>';
-                                        echo '<button class="btn btn-warning btn-sm edit-promotion" data-id="' . $row["promotion_id"] . '" data-name="' . $row["promotion_name"] . '" data-description="' . $row["description"] . '" data-discount="' . $row["discount_percentage"] . '" data-image="' . $row["image_url"] . '">แก้ไข</button> ';
+                                        echo '<button class="btn btn-warning btn-sm edit-promotion" data-id="' . $row["promotion_id"] . '" data-name="' . $row["promotion_name"] . '" data-description="' . $row["description"] . '" data-discount="' . $row["discount_percentage"] . '">แก้ไข</button> ';
                                         echo '<button class="btn btn-danger btn-sm delete-promotion" data-id="' . $row["promotion_id"] . '">ลบ</button>';
                                         echo '</td>';
                                         echo '</tr>';
@@ -220,7 +227,7 @@ session_start(); // เริ่ม session
                                 $result = $conn->query($sql);
 
                                 if ($result->num_rows > 0) {
-                                    echo '<div class="table-responsive">';
+                                    echo '<div class="table-responsive table-wrapper">';
                                     echo '<table class="table table-striped">';
                                     echo '<thead>';
                                     echo '<tr>';
@@ -502,6 +509,7 @@ session_start(); // เริ่ม session
         document.addEventListener("DOMContentLoaded", function () {
             // Show add product button
             document.getElementById("add-product").style.display = "block";
+
             // Toggle between sections
             document.querySelectorAll(".manage-section").forEach(function (el) {
                 el.addEventListener("click", function () {
@@ -516,24 +524,24 @@ session_start(); // เริ่ม session
                     });
                     if (sectionId === "manage-products") {
                         document.getElementById("product-management").style.display = "block";
-                        document.getElementById("add-product").style.display = "block"; // แสดงปุ่มเพิ่มสินค้าใหม่
-                        document.getElementById("add-promotion").style.display = "none"; // ซ่อนปุ่มเพิ่มโปรโมชั่นใหม่
+                        document.getElementById("add-product").style.display = "block";
+                        document.getElementById("add-promotion").style.display = "none";
                         document.getElementById("add-faq").style.display = "none";
-                    } if (sectionId === "manage-promotions") {
+                    }
+                    if (sectionId === "manage-promotions") {
                         document.getElementById("promotion-management").style.display = "block";
-                        document.getElementById("add-product").style.display = "none"; // ซ่อนปุ่มเพิ่มสินค้าใหม่
-                        document.getElementById("add-promotion").style.display = "block"; // แสดงปุ่มเพิ่มโปรโมชั่นใหม่
+                        document.getElementById("add-product").style.display = "none";
+                        document.getElementById("add-promotion").style.display = "block";
                         document.getElementById("add-faq").style.display = "none";
-                    } if (sectionId === "manage-faq") {
+                    }
+                    if (sectionId === "manage-faq") {
                         document.getElementById("faq-management").style.display = "block";
-                        document.getElementById("add-product").style.display = "none"; // ซ่อนปุ่มเพิ่มสินค้าใหม่
-                        document.getElementById("add-promotion").style.display = "none"; // แสดงปุ่มเพิ่มโปรโมชั่นใหม่
+                        document.getElementById("add-product").style.display = "none";
+                        document.getElementById("add-promotion").style.display = "none";
                         document.getElementById("add-faq").style.display = "block";
                     }
                 });
             });
-
-
 
             // Show add product modal
             document.getElementById("add-product").addEventListener("click", function () {
@@ -546,7 +554,8 @@ session_start(); // เริ่ม session
                 var myModal = new bootstrap.Modal(document.getElementById("addPromotionModal"));
                 myModal.show();
             });
-            // Show add faq modal
+
+            // Show add FAQ modal
             document.getElementById("add-faq").addEventListener("click", function () {
                 var myModal = new bootstrap.Modal(document.getElementById("addFaqModal"));
                 myModal.show();
@@ -648,7 +657,6 @@ session_start(); // เริ่ม session
                 });
             });
 
-
             // Show delete promotion confirmation
             document.querySelectorAll(".delete-promotion").forEach(function (button) {
                 button.addEventListener("click", function () {
@@ -669,8 +677,8 @@ session_start(); // เริ่ม session
                     });
                 });
             });
-
         });
+
     </script>
 
 </body>
